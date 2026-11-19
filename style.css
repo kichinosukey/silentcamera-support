@@ -1,14 +1,148 @@
-:root { color-scheme: light dark; --moon: #c99a3e; }
-@media (prefers-color-scheme: dark) { :root { --moon: #F4D79B; } }
-body { font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif;
-       line-height: 1.8; max-width: 40rem; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
-h1 { font-size: 1.5rem; }
-h2 { font-size: 1.1rem; margin-top: 2rem; }
-hr { margin: 3rem 0; border: 0; border-top: 1px solid #8884; }
-dt { font-weight: 700; margin-top: 1rem; }
-dd { margin: 0.2rem 0 0; }
-.date, .note { color: #888; }
-.button { display: inline-block; padding: 0.5rem 1.2rem; border-radius: 999px; border: 2px solid var(--moon);
-          color: inherit; text-decoration: none; font-weight: 700; }
-.store { margin: 1rem 0 0; }
+/* しずかなカメラ サポート
+   色はアプリのアイコンとストアのスクリーンショットに合わせる（夜空の紺、月の色）。
+   scripts/store_caption.py の NAVY (14,27,64) と CREAM (244,215,155)。 */
+:root {
+  color-scheme: light dark;
+  --navy: #0e1b40;
+  --cream: #f4d79b;
+
+  --bg: #fbfaf6;
+  --text: #2b3352;
+  --heading: var(--navy);
+  --muted: #5d6582;
+  --link: #1d3a8f;
+  --rule: #0e1b4026;
+  --accent: #c99a3e;           /* 線と飾りだけに使う。文字には使わない（白地で読みにくい） */
+  --band-bg: var(--navy);
+  --band-text: var(--cream);
+  --callout-bg: #0e1b400a;
+  --focus: #1d3a8f;
+
+  --step--1: 0.875rem;
+  --step-0: 1rem;
+  --step-1: 1.125rem;
+  --step-2: 1.375rem;
+  --step-3: 1.75rem;
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2.5rem;
+  --space-5: 4rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0b1531;
+    --text: #dfe3ef;
+    --heading: var(--cream);
+    --muted: #a3abc4;
+    --link: var(--cream);
+    --rule: #f4d79b33;
+    --accent: var(--cream);
+    --band-bg: #0e1b40;
+    --callout-bg: #f4d79b0f;
+    --focus: var(--cream);
+  }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; overflow-x: clip; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif;
+  font-size: var(--step-0);
+  line-height: 1.85;
+  overflow-x: clip;
+}
+
+/* 上の帯: アプリ名。どのページでも同じ場所に出す */
+.site {
+  background: var(--band-bg);
+  color: var(--band-text);
+}
+.site-inner {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: var(--space-2);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.site a {
+  color: var(--band-text);
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 44px;
+}
+.site img { display: block; }
+
+main, .footer-inner {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 0 var(--space-2);
+}
+main { padding-top: var(--space-4); padding-bottom: var(--space-4); }
+
+h1, h2 { color: var(--heading); line-height: 1.45; text-wrap: balance; }
+h1 { font-size: var(--step-3); margin: 0 0 var(--space-1); }
+h2 {
+  font-size: var(--step-2);
+  margin: var(--space-4) 0 var(--space-2);
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--rule);
+}
+p, li, dd { text-wrap: pretty; }
+p { margin: 0 0 var(--space-2); }
+ul { padding-left: 1.25rem; margin: 0 0 var(--space-3); }
+li { margin-bottom: 0.4rem; }
+li::marker { color: var(--accent); }
+
+a { color: var(--link); text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: 0.2em; }
+a:active { opacity: 0.7; }
+a:focus-visible, .button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 4px; }
+
+.lead { font-size: var(--step-1); }
+.date, .note { color: var(--muted); font-size: var(--step--1); }
+.crumb { color: var(--muted); font-size: var(--step--1); margin-bottom: var(--space-2); }
+
+hr { margin: var(--space-5) 0; border: 0; border-top: 1px solid var(--rule); }
+
+dl { margin: 0; }
+dt { color: var(--heading); font-weight: 700; margin-top: var(--space-3); }
+dd { margin: 0.3rem 0 0; }
+
+/* アプリの紹介: 地の色を少し変えて、ここだけまとまって見えるようにする */
+.callout {
+  background: var(--callout-bg);
+  border-radius: 12px;
+  padding: var(--space-3) var(--space-3) var(--space-2);
+  margin: var(--space-3) 0;
+}
+.callout ul { margin-bottom: var(--space-2); }
+
+.store { margin: var(--space-2) 0; }
+.store a { display: inline-block; }
 .store img { display: block; }
+
+.button {
+  display: inline-flex; align-items: center; min-height: 44px;
+  padding: var(--space-1) var(--space-3); border-radius: 999px; border: 2px solid var(--accent);
+  color: var(--heading); text-decoration: none; font-weight: 700;
+}
+
+.skip {
+  position: absolute; left: var(--space-2); top: -4rem;
+  background: var(--cream); color: var(--navy); padding: var(--space-1) var(--space-2);
+  border-radius: 8px; font-weight: 700; z-index: 10;
+}
+.skip:focus { top: var(--space-1); }
+
+footer { border-top: 1px solid var(--rule); color: var(--muted); font-size: var(--step--1); }
+.footer-inner { padding-top: var(--space-3); padding-bottom: var(--space-4); }
+footer a { color: var(--muted); white-space: nowrap; }
+.site a:focus-visible { outline-color: var(--cream); }
